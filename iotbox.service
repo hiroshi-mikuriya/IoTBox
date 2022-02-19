@@ -1,0 +1,16 @@
+[Unit]
+Description = iotbox
+After = multi-user.target
+
+[Service]
+Type = simple
+WorkingDirectory=/home/pi
+User=pi
+ExecStart = /usr/bin/python /home/pi/iot/main.py
+StandardOutput = journal
+StandardError = journal
+Restart = on-failure
+RestartSec = 1s
+
+[Install]
+WantedBy = multi-user.target
