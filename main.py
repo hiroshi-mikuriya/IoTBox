@@ -24,7 +24,7 @@ def waitForRecv(uart: Uart):
     while True:
         try:
             return uart.waitForRecv().decode('utf8').replace('\r', '')
-        except UnicodeDecodeError as e:
+        except Exception as e:
             print(type(e))
             print(e)
 
@@ -40,34 +40,32 @@ def run(io: Gpio, uart: Uart):
     uart: Uart
         UART通信オブジェクト
     """
-    CLOSE = 0  # ゴミ箱が閉じているときのサーボ値
-    OPEN = 16  # ゴミ箱が開いているときのサーボ値
+    CLOSE = 16  # ゴミ箱が閉じているときのサーボ値
+    OPEN = 0  # ゴミ箱が開いているときのサーボ値
     io.motor(CLOSE)
     io.led(False)
-    per = 0  # リサイクル達成率のダミーデータ
+    per = 10  # リサイクル達成率のダミーデータ
     db = RedisAdapter()
     while True:
         db.set('バーコードを読み取ります。')
-        text = waitForRecv(uart)
-        db.set(text)
+        waitForRecv(uart)
         io.led(True)
-        time.sleep(1.0)
         db.set('読み取りました。')
+        time.sleep(1.0)
         io.led(False)
         io.motor(OPEN)
         for i in range(5, 0, -1):
             db.set('投入してください。 {0}sec'.format(i))
             time.sleep(1.0)
         db.set('リサイクル達成率 {0}%'.format(per))
-        for i in range(OPEN, CLOSE, -1):
+        for i in range(OPEN, CLOSE, 1):
             io.motor(i)
             time.sleep(0.05)
         io.motor(CLOSE)
         time.sleep(1.0)
         # ダミーのリサイクル達成率を更新する
-        per += 10
-        if 100 < per:
-            per = 0
+        if per < 100:
+            per += 10
 
 
 if __name__ == '__main__':

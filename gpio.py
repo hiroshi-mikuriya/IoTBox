@@ -14,6 +14,7 @@ class Gpio:
         GPIO初期化する
         """
         print('Gpio __init__')
+        GPIO.cleanup()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(SERVO_PIN, GPIO.OUT)
         GPIO.setup(LED_PIN, GPIO.OUT)

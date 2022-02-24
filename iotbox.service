@@ -1,6 +1,6 @@
 [Unit]
 Description = iotbox
-After = multi-user.target
+Before = bluetooth
 
 [Service]
 Type = simple
