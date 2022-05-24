@@ -88,7 +88,7 @@ $ sudo vim /etc/xdg/lxsession/LXDE/autostart
 $ sudo vim /etc/lightdm/lightdm.conf
 # 以下追記
 [SeatDefaults]
-xserver–command=X –s 0 –dpms
+xserver-command=X -s 0 -dpms
 ```
 
 ## デスクトップ背景を単色（グレー）にする
